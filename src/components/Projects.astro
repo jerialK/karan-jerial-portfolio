@@ -1,0 +1,342 @@
+---
+interface Project {
+  title: string;
+  description: string;
+  tags: string[];
+  image?: string;
+  link?: string;
+}
+
+const projects: Project[] = [
+  {
+    title: 'Manufacturing Execution System',
+    description:
+      'Full-stack MES for a discrete manufacturing facility. 13 production stages, refurbishing workflows, 3 user roles, stage gating, multi-stage QA logs, chemical composition tracking, KPI dashboard. Bilingual EN/Hindi.',
+    tags: ['React', 'Supabase', 'PostgreSQL'],
+    image: '/mes-dashboard.png',
+    link: 'https://bajrang-rolls.vercel.app',
+  },
+  {
+    title: 'CVRP Distribution Optimizer',
+    description:
+      'Vehicle routing for a 123-store network with DOT regulations and time windows. Clarke-Wright + 2-opt + random restarts achieving 25.7% mileage savings. Interactive dashboard with Folium/Plotly maps.',
+    tags: ['OR-Tools', 'PyVRP', 'LKH-3', 'Python'],
+    image: '/cvrp-dashboard.png',
+    link: 'https://nhg-project.vercel.app/',
+  },
+  {
+    title: 'Supply Chain KPI Dashboard',
+    description:
+      'End-to-end supply chain performance dashboard on 24 months of data — 300 POs, 8 suppliers, 400 shipments, 4 work centers. Tracks OEE%, supplier OTD rate, OTIF by region, and procurement spend by category.',
+    tags: ['Power BI', 'Excel Online', 'Analytics'],
+    image: '/powerbi-dashboard.png',
+  },
+  {
+    title: 'Roll Wear & Change Optimization',
+    description:
+      'ML predictive maintenance on real Roll History Cards from Evonith Value Steel Ltd, Wardha. 56 campaigns, 30,029 MT of production data. In-house rolls averaged 144% higher output. Random Forest classifier reduces quality escapes to zero.',
+    tags: ['Python', 'pandas', 'scikit-learn', 'matplotlib'],
+    image: '/real_roll_analysis.png',
+  },
+  {
+    title: 'Demand Forecasting Tool',
+    description:
+      'Excel-based WMA demand forecasting for 5 major customers with 30 POs of historical data each. Forecasts inter-arrival gap and order quantity with adjustable weights. Summary dashboard for production planning.',
+    tags: ['Excel', 'openpyxl', 'WMA Forecasting'],
+    image: '/wma-forecast.png',
+  },
+  {
+    title: 'NGO Inventory Manager',
+    description:
+      'Donation tracking platform with 2D warehouse floor plan, 24 shelf slots, cart-based distribution, recipient tracking, bilingual EN/ES, 4 user roles, realtime updates, Excel export. WCAG AA compliant.',
+    tags: ['React', 'Supabase', 'Resend API'],
+    image: '/ngo-dashboard.png',
+  },
+  {
+    title: 'Production WIP Tracker',
+    description:
+      'Canvas app digitizing an 8-stage discrete manufacturing pipeline, replacing manual paper-based tracking for ~20 active components. SharePoint Lists backend with no premium licensing required.',
+    tags: ['Power Apps', 'SharePoint', 'M365'],
+  },
+  {
+    title: 'Trading Signal Analyzer',
+    description:
+      'Multi-timeframe trading signal tool for Indian equity markets. Integrates 2-min, 15-min, and 30-min confluence signals with VWAP, EMA ribbons, RSI, Supertrend, and ATR-based dynamic stop calculations.',
+    tags: ['React', 'NSE/BSE', 'Multi-timeframe'],
+  },
+];
+---
+
+<section class="projects" id="projects" aria-label="Projects">
+
+  <div class="projects__head container">
+    <p class="section-eyebrow fade-in">Selected Work</p>
+    <h2 class="projects__title fade-in fade-in-delay-1">Things I've built</h2>
+  </div>
+
+  <div class="projects__list">
+    {projects.map((project, i) => {
+      const num = String(i + 1).padStart(2, '0');
+      return (
+        <article class={`proj-spread fade-in`}>
+
+          <span class="proj-spread__folio" aria-hidden="true">{num}</span>
+
+          <div class="proj-spread__media">
+            {project.image ? (
+              <img
+                src={project.image}
+                alt={`${project.title} screenshot`}
+                class="proj-spread__img"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div class="proj-spread__placeholder">
+                <span>{num}</span>
+              </div>
+            )}
+          </div>
+
+          <div class="proj-spread__body">
+            <header class="proj-spread__header">
+              <div class="proj-spread__meta">
+                <span class="eyebrow">{num} — {project.tags[0]}</span>
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="proj-spread__ext"
+                    aria-label={`Visit ${project.title}`}
+                  >↗</a>
+                )}
+              </div>
+              <h3 class="proj-spread__title">{project.title}</h3>
+            </header>
+
+            <p class="proj-spread__desc">{project.description}</p>
+
+            <footer class="proj-spread__footer">
+              <div class="proj-spread__tags">
+                {project.tags.map((t) => <span class="tag">{t}</span>)}
+              </div>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="proj-spread__cta"
+                >View project →</a>
+              )}
+            </footer>
+          </div>
+
+        </article>
+      );
+    })}
+  </div>
+
+</section>
+
+<style>
+.projects {
+  background: var(--color-surface);
+  padding-block: var(--section-padding);
+}
+
+.projects__head {
+  margin-bottom: clamp(3rem, 7vw, 5rem);
+}
+
+.projects__title {
+  font-weight: var(--weight-light);
+  margin-top: var(--space-sm);
+}
+
+/* ── Spread list ─────────────────────────────────────────────────── */
+.projects__list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Individual spread ───────────────────────────────────────────── */
+.proj-spread {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: clamp(360px, 50vh, 560px);
+  border-top: 1px solid var(--color-border);
+}
+.proj-spread:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Alternating: odd → media right, even → media left */
+.proj-spread:nth-child(odd) .proj-spread__media  { order: 2; }
+.proj-spread:nth-child(odd) .proj-spread__body   { order: 1; }
+.proj-spread:nth-child(even) .proj-spread__media { order: 1; }
+.proj-spread:nth-child(even) .proj-spread__body  { order: 2; }
+
+/* ── Media ──────────────────────────────────────────────────────── */
+.proj-spread__media {
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.proj-spread__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.proj-spread:hover .proj-spread__img {
+  transform: scale(1.04);
+}
+
+.proj-spread__placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.proj-spread__placeholder span {
+  font-family: var(--font-heading);
+  font-variation-settings: "opsz" 144;
+  font-size: clamp(5rem, 12vw, 10rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--color-border);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* ── Folio ──────────────────────────────────────────────────────── */
+.proj-spread__folio {
+  position: absolute;
+  top: clamp(1rem, 2vw, 1.5rem);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--color-border);
+  z-index: 1;
+}
+.proj-spread:nth-child(odd) .proj-spread__folio  {
+  left: clamp(1.5rem, 4vw, 3rem);
+}
+.proj-spread:nth-child(even) .proj-spread__folio {
+  right: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* ── Body ───────────────────────────────────────────────────────── */
+.proj-spread__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 5vw, 4rem);
+  gap: var(--space-lg);
+}
+
+.proj-spread__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.proj-spread__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.proj-spread__ext {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--color-muted);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+.proj-spread__ext:hover {
+  color: var(--color-signal);
+  border-color: var(--color-signal);
+  background: rgba(212,117,58,0.06);
+}
+
+.proj-spread__title {
+  font-family: var(--font-heading);
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+}
+
+.proj-spread__desc {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  line-height: 1.85;
+  flex: 1;
+}
+
+.proj-spread__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.proj-spread__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.proj-spread__cta {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color var(--transition-fast);
+}
+.proj-spread__cta:hover { color: var(--color-signal); }
+
+/* ── Mobile ─────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .proj-spread {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .proj-spread__media {
+    order: 1 !important;
+    height: clamp(220px, 60vw, 300px);
+  }
+  .proj-spread__body {
+    order: 2 !important;
+    padding: clamp(1.5rem, 5vw, 2rem) clamp(1.25rem, 5vw, 1.75rem);
+  }
+  .proj-spread__folio {
+    left: clamp(1.25rem, 5vw, 1.75rem) !important;
+    right: auto !important;
+  }
+}
+</style>

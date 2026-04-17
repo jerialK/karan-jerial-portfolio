@@ -1,0 +1,280 @@
+---
+const experiences = [
+  {
+    role: 'Graduate Student — Engineering Management',
+    company: 'Northeastern University',
+    location: 'Boston, MA',
+    year: '2024',
+    period: 'Sep 2024 — Present',
+    bullets: [
+      'Master of Engineering Management (GPA 3.8) — Expected Aug 2027',
+      'Developed CVRP routing optimizer for 123-store network achieving 25.7% mileage savings via Clarke-Wright + 2-opt + random restarts',
+      'Built MRP lot-sizing models (FOQ, L4L, POQ, Wagner-Whitin) and LP aggregate planning formulations',
+      'Case studies in organizational structures, agile/hybrid PM, and project scope management',
+    ],
+    tags: ['OR-Tools', 'Python', 'R', 'Supply Chain'],
+    current: true,
+    note: 'GPA 3.8 / 4.0',
+  },
+  {
+    role: 'Manufacturing Operations Manager',
+    company: 'BTR Pvt. Ltd.',
+    location: 'India',
+    year: '2022',
+    period: '2022 — 2024',
+    bullets: [
+      'Led end-to-end production across multi-stage manufacturing, managing 50+ person cross-functional teams',
+      'Managed 30+ suppliers — 30% procurement cost reduction and 40% material lead time reduction',
+      'Delivered $500K+ greenfield facility project 8% under budget',
+      'Implemented SAP procure-to-pay workflows including RFQ, e-bidding, and invoice processing',
+    ],
+    tags: ['SAP P2P', 'Capital Projects', 'Procurement', 'Manufacturing'],
+    current: false,
+    note: '2 years',
+  },
+  {
+    role: 'Production & Quality Engineer',
+    company: 'BTR Pvt. Ltd.',
+    location: 'India',
+    year: '2019',
+    period: '2019 — 2022',
+    bullets: [
+      'Managed production scheduling and WIP tracking across 8 stages for ~20 active components simultaneously',
+      'Led quality assurance inspections: ultrasonic testing, MPI, and hardness testing',
+      'Developed heat treatment SOPs reducing defect rate by 50%',
+      'Supported reconditioning programs for Tata Steel, AMNS, JSW Steel, and Jindal Steel',
+    ],
+    tags: ['QA/QC', 'NDT', 'SOP Development', 'Production'],
+    current: false,
+    note: '3 years',
+  },
+  {
+    role: 'Supply Chain & Distribution Coordinator',
+    company: 'Jeevan Ka Parkash NGO',
+    location: 'Delhi, India',
+    year: '2021',
+    period: '2021 — 2022',
+    bullets: [
+      'Volunteer COVID-19 response — coordinated distribution of oxygen tanks, PPE, and face masks across Delhi',
+      'Managed supplier coordination, recipient tracking, and last-mile distribution logistics under crisis conditions',
+      'Built inventory and donation tracking workflows that informed the later NGO inventory dashboard project',
+    ],
+    tags: ['Logistics', 'Volunteer', 'Crisis Management'],
+    current: false,
+    note: 'Volunteer',
+  },
+];
+---
+
+<section class="experience section" id="experience" aria-label="Experience">
+  <div class="container">
+
+    <p class="section-eyebrow fade-in">Experience</p>
+    <h2 class="exp__heading mask-line fade-in fade-in-delay-1">
+      <span>Where I've worked</span>
+    </h2>
+
+    <div class="exp__entries">
+      {experiences.map((exp, i) => (
+        <article class={`exp__entry fade-in fade-in-delay-${Math.min(i + 1, 3)}`}>
+
+          <!-- Year marker -->
+          <div class="exp__year-col">
+            <span class="exp__year">{exp.year}</span>
+            {exp.current && <span class="exp__now-badge eyebrow">Now</span>}
+          </div>
+
+          <!-- Content -->
+          <div class="exp__content">
+            <header class="exp__header">
+              <div class="exp__header-main">
+                <p class="exp__company-line eyebrow">
+                  {exp.company} &mdash; {exp.location}
+                </p>
+                <h3 class="exp__role">{exp.role}</h3>
+              </div>
+              <div class="exp__header-aside">
+                <span class="label exp__period">{exp.period}</span>
+                <span class="label exp__note">{exp.note}</span>
+              </div>
+            </header>
+
+            <ul class="exp__bullets">
+              {exp.bullets.map((b) => (
+                <li class="exp__bullet">{b}</li>
+              ))}
+            </ul>
+
+            <div class="exp__tags">
+              {exp.tags.map((t) => <span class="tag">{t}</span>)}
+            </div>
+          </div>
+
+        </article>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+.experience {
+  background: var(--color-bg);
+}
+
+.exp__heading {
+  font-weight: var(--weight-light);
+  margin-bottom: clamp(3rem, 7vw, 5.5rem);
+}
+
+/* ── Entries ─────────────────────────────────────────────────────── */
+.exp__entries {
+  display: flex;
+  flex-direction: column;
+}
+
+.exp__entry {
+  display: grid;
+  grid-template-columns: clamp(5rem, 10vw, 8rem) 1fr;
+  gap: 0 clamp(2rem, 5vw, 4rem);
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  border-top: 1px solid var(--color-border);
+}
+.exp__entry:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ── Year column ────────────────────────────────────────────────── */
+.exp__year-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  padding-top: 0.35rem; /* align with role text cap-height */
+}
+
+.exp__year {
+  font-family: var(--font-heading);
+  font-variation-settings: "opsz" 144;
+  font-size: clamp(1.75rem, 4vw, 3.5rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--color-border);
+}
+
+.exp__now-badge {
+  color: var(--color-signal);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  margin-top: 4px;
+}
+
+/* ── Content ────────────────────────────────────────────────────── */
+.exp__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.exp__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.exp__header-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.exp__company-line {
+  color: var(--color-signal);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+.exp__role {
+  font-family: var(--font-heading);
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(1.15rem, 2.5vw, 1.6rem);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.exp__header-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.exp__period {
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.exp__note {
+  font-size: 0.66rem;
+  color: var(--color-border);
+}
+
+/* ── Bullets ────────────────────────────────────────────────────── */
+.exp__bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exp__bullet {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  line-height: 1.75;
+  padding-left: 1.25rem;
+  position: relative;
+}
+.exp__bullet::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 5px;
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* ── Tags ───────────────────────────────────────────────────────── */
+.exp__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .exp__entry {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+  .exp__year-col {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-md);
+  }
+  .exp__year {
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
+  }
+  .exp__header {
+    flex-direction: column;
+  }
+  .exp__header-aside {
+    align-items: flex-start;
+  }
+}
+</style>

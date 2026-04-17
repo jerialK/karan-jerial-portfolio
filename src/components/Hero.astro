@@ -1,0 +1,525 @@
+---
+// Hero — editorial luxury redesign
+---
+
+<section class="hero" id="home" aria-label="Introduction">
+  <!-- Background layers -->
+  <canvas id="dotsCanvas" class="hero__bg-canvas" aria-hidden="true"></canvas>
+  <canvas id="heroCanvas" class="hero__bg-canvas hero__keyword-canvas" aria-hidden="true"></canvas>
+  <div class="grain" style="z-index:2;" aria-hidden="true"></div>
+
+  <!-- Two-column editorial grid -->
+  <div class="hero__layout">
+
+    <!-- Left: all text content -->
+    <div class="hero__left">
+
+      <!-- Eyebrow row -->
+      <div class="hero__top-bar fade-in">
+        <span class="eyebrow">Operations &amp; Supply Chain Engineer</span>
+        <span class="eyebrow hero__loc">Boston, MA — 2026</span>
+      </div>
+
+      <!-- Name — the centrepiece -->
+      <div class="hero__name-block" id="hero-name-block" aria-label="Karan Jerial">
+        <div class="hero__name-line">
+          <span class="hero__name-word hero__name-word--light" aria-hidden="true">Karan</span>
+        </div>
+        <div class="hero__name-line">
+          <span class="hero__name-word hero__name-word--bold" aria-hidden="true">Jerial</span>
+        </div>
+      </div>
+
+      <!-- Lower: sub + stats -->
+      <div class="hero__lower">
+        <div class="hero__sub-col">
+          <p class="hero__sub fade-in">
+            Six years building and optimizing manufacturing operations,
+            procurement, and supply chains. Now extending that depth
+            with data tools and engineering management at Northeastern.
+          </p>
+          <div class="hero__actions fade-in fade-in-delay-1">
+            <a href="#projects" class="btn btn--primary">View Work</a>
+            <a href="/resume.pdf" download class="btn btn--ghost">Resume ↓</a>
+          </div>
+          <div class="hero__socials fade-in fade-in-delay-2">
+            <a
+              href="https://www.linkedin.com/in/karan-veer-singh-jerial-b1340216a"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hero__social-link"
+              aria-label="LinkedIn profile"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                <rect x="2" y="9" width="4" height="12"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+              <span>LinkedIn</span>
+            </a>
+            <a
+              href="mailto:jerial.k@northeastern.edu"
+              class="hero__social-link"
+              aria-label="Email Karan"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <span>Email</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Stat numbers — typographic objects -->
+        <div class="hero__stats fade-in fade-in-delay-2">
+          <div class="hero__stat">
+            <span class="hero__stat-val">6<sup>+</sup></span>
+            <span class="hero__stat-label">Years</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-val">8</span>
+            <span class="hero__stat-label">Projects</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-val">3.8</span>
+            <span class="hero__stat-label">MEM GPA</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /hero__left -->
+
+    <!-- Right: portrait — bleeds to viewport edge -->
+    <div class="hero__photo-frame" aria-hidden="true">
+      <div class="hero__photo-bg">KJ</div>
+      <img
+        id="hero-photo"
+        src="/profile.jpg"
+        alt=""
+        class="hero__photo"
+        loading="eager"
+        decoding="async"
+        onerror="this.style.display='none'"
+      />
+      <!-- Fade gradient covering left edge of photo -->
+      <div class="hero__photo-fade"></div>
+    </div>
+
+  </div><!-- /hero__layout -->
+</section>
+
+<script>
+// ─── Dots particle system (scroll-linked) ───────────────────────────
+(function () {
+  const canvas = document.getElementById('dotsCanvas') as HTMLCanvasElement | null;
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  interface Dot { x: number; y: number; vx: number; vy: number; size: number; base: number; }
+  let W = 0, H = 0;
+  const dots: Dot[] = [];
+
+  function rand(a: number, b: number) { return a + Math.random() * (b - a); }
+
+  function makeDot(small: boolean): Dot {
+    const spd = small ? 0.3 : 0.15;
+    const ang = Math.random() * Math.PI * 2;
+    return { x: Math.random() * W, y: Math.random() * H,
+             vx: Math.cos(ang) * spd * rand(0.6, 1), vy: Math.sin(ang) * spd * rand(0.6, 1),
+             size: small ? rand(1, 2.5) : rand(3, 5), base: small ? 0.10 : 0.15 };
+  }
+
+  function scatter() {
+    W = canvas!.width  = canvas!.offsetWidth;
+    H = canvas!.height = canvas!.offsetHeight;
+    for (const d of dots) { d.x = Math.random() * W; d.y = Math.random() * H; }
+  }
+
+  for (let i = 0; i < 90; i++) dots.push(makeDot(true));
+  for (let i = 0; i < 6;  i++) dots.push(makeDot(false));
+  requestAnimationFrame(scatter);
+
+  let oMult = 1, sMult = 1, cAlpha = 1;
+  function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
+  function dotRGB() {
+    return document.documentElement.getAttribute('data-theme') === 'dark'
+      ? '240,235,224' : '28,22,18';
+  }
+
+  function tick() {
+    const prog = Math.min(1, window.scrollY / (window.innerHeight || 1));
+    let tO: number, tS: number, tA: number;
+    if (prog <= 0.5) {
+      const p = prog / 0.5;
+      tO = 1 + p * 1.5; tS = 1 - p * 0.8; tA = 1;
+    } else {
+      const p = (prog - 0.5) / 0.5;
+      tO = 2.5; tS = 0.2; tA = 1 - p;
+    }
+    oMult  = lerp(oMult,  tO, 0.08);
+    sMult  = lerp(sMult,  tS, 0.08);
+    cAlpha = lerp(cAlpha, tA, 0.08);
+    canvas!.style.opacity = cAlpha.toString();
+    ctx!.clearRect(0, 0, W, H);
+    const col = dotRGB();
+    for (const d of dots) {
+      d.x += d.vx * sMult; d.y += d.vy * sMult;
+      if (d.x < -d.size) d.x = W + d.size;
+      else if (d.x > W + d.size) d.x = -d.size;
+      if (d.y < -d.size) d.y = H + d.size;
+      else if (d.y > H + d.size) d.y = -d.size;
+      ctx!.beginPath();
+      ctx!.arc(d.x, d.y, d.size, 0, Math.PI * 2);
+      ctx!.fillStyle = `rgba(${col},${Math.min(1, d.base * oMult)})`;
+      ctx!.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  const ro = new ResizeObserver(scatter);
+  ro.observe(document.getElementById('home') ?? canvas);
+  window.addEventListener('pagehide', () => ro.disconnect());
+})();
+</script>
+
+<script>
+// ─── Supply-chain keyword canvas ────────────────────────────────────
+(function () {
+  const canvas = document.getElementById('heroCanvas') as HTMLCanvasElement | null;
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const KW = [
+    'demand forecasting', 'inventory optimization', 'just-in-time',
+    'safety stock', 'lead time', 'reorder point', 'SKU rationalization',
+    'warehouse management', 'last-mile delivery', 'cold chain',
+    'procurement', 'vendor managed', 'S&OP', 'MRP', 'ERP',
+    'logistics network', 'throughput', 'cycle time', 'bullwhip effect',
+    'freight forwarding', 'incoterms', 'cross-docking', 'pick & pack',
+    'returns management', 'routing optimization', 'supply visibility',
+    'digital twin', 'predictive analytics', 'IoT sensors', 'RFID',
+  ];
+
+  interface P { x:number; y:number; word:string; alpha:number; target:number; speed:number; size:number; life:number; max:number; }
+  const particles: P[] = [];
+  let W = 0, H = 0;
+
+  function resize() { W = canvas!.width = canvas!.offsetWidth; H = canvas!.height = canvas!.offsetHeight; }
+
+  function color() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#f0ebe0' : '#1c1612'; }
+
+  function rp(): P { return { x: Math.random()*W, y: Math.random()*H, word: KW[Math.floor(Math.random()*KW.length)], alpha:0, target: 0.05 + Math.random()*0.09, speed: 0.18+Math.random()*0.22, size: 10+Math.random()*7, life:0, max: 220+Math.random()*160 }; }
+
+  resize();
+  for (let i = 0; i < 26; i++) { const p = rp(); p.life = Math.random()*p.max; particles.push(p); }
+
+  let raf: number;
+  function draw() {
+    ctx!.clearRect(0, 0, W, H);
+    const c = color();
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i]; p.life += p.speed;
+      const t = p.life / p.max;
+      p.alpha = t < 0.15 ? (t/0.15)*p.target : t < 0.75 ? p.target : ((1-t)/0.25)*p.target;
+      if (p.life >= p.max) { particles[i] = rp(); continue; }
+      ctx!.save(); ctx!.font = `300 ${p.size}px 'DM Mono',monospace`;
+      ctx!.globalAlpha = p.alpha; ctx!.fillStyle = c; ctx!.fillText(p.word, p.x, p.y); ctx!.restore();
+    }
+    raf = requestAnimationFrame(draw);
+  }
+  draw();
+
+  const ro = new ResizeObserver(resize); ro.observe(canvas);
+  window.addEventListener('pagehide', () => { cancelAnimationFrame(raf); ro.disconnect(); });
+})();
+</script>
+
+<script>
+// ─── Hero name mask-reveal on load ──────────────────────────────────
+(function () {
+  const block = document.getElementById('hero-name-block');
+  if (!block) return;
+  // Small delay so the user sees the reveal
+  setTimeout(() => block.classList.add('revealed'), 120);
+})();
+
+// ─── Portrait parallax on scroll ────────────────────────────────────
+(function () {
+  const photo = document.getElementById('hero-photo') as HTMLImageElement | null;
+  if (!photo) return;
+  function update() {
+    const s = window.scrollY;
+    if (s < window.innerHeight * 1.2) {
+      photo!.style.transform = `translateY(${s * 0.12}px) scale(1.06)`;
+    }
+    requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+})();
+</script>
+
+<style>
+/* ── Section ───────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+
+/* Background canvases */
+.hero__bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+.hero__bg-canvas { z-index: 0; }
+.hero__keyword-canvas { z-index: 1; }
+
+/* ── Two-column layout ──────────────────────────────────────────────── */
+.hero__layout {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1fr clamp(200px, 34vw, 480px);
+  min-height: 100svh;
+}
+
+/* ── Left column ───────────────────────────────────────────────────── */
+.hero__left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: clamp(1.5rem, 5vw, 3rem);
+  padding-right: clamp(1rem, 3vw, 2rem);
+  padding-block: clamp(4.5rem, 9vw, 7rem) clamp(2.5rem, 5vw, 4rem);
+}
+
+.hero__top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.hero__loc { text-align: right; }
+
+/* ── Name block ─────────────────────────────────────────────────────── */
+.hero__name-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 2vw, 1.5rem);
+}
+
+.hero__name-line {
+  overflow: hidden;
+  line-height: 0.86;
+}
+
+.hero__name-word {
+  display: block;
+  font-family: var(--font-heading);
+  font-variation-settings: "opsz" 144;
+  font-size: clamp(5rem, 15vw, 13.5rem);
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  color: var(--color-text);
+  transform: translateY(108%);
+  transition: transform 1.15s var(--ease-out-expo);
+}
+
+.hero__name-word--light {
+  font-weight: 300;
+  font-style: normal;
+}
+.hero__name-word--bold {
+  font-weight: 700;
+  font-style: italic;
+  color: var(--color-text);
+}
+
+/* Triggered by JS */
+.hero__name-block.revealed .hero__name-word { transform: translateY(0); }
+.hero__name-block.revealed .hero__name-line:nth-child(2) .hero__name-word {
+  transition-delay: 0.09s;
+}
+
+/* ── Lower strip ────────────────────────────────────────────────────── */
+.hero__lower {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-top: clamp(1.25rem, 3vw, 2rem);
+  border-top: 1px solid var(--color-border);
+}
+
+.hero__sub-col {
+  flex: 1;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.hero__sub {
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  color: var(--color-muted);
+  line-height: 1.85;
+  max-width: 46ch;
+}
+
+.hero__actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.hero__socials {
+  display: flex;
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+.hero__social-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: var(--weight-regular);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color var(--transition-fast);
+}
+.hero__social-link:hover { color: var(--color-signal); }
+
+/* ── Stats ──────────────────────────────────────────────────────────── */
+.hero__stats {
+  display: flex;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.hero__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.hero__stat-val {
+  font-family: var(--font-heading);
+  font-variation-settings: "opsz" 144;
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+}
+
+.hero__stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+/* ── Portrait column ────────────────────────────────────────────────── */
+.hero__photo-frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.hero__photo-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 2.5rem;
+  font-weight: var(--weight-medium);
+  color: var(--color-border);
+  letter-spacing: 0.08em;
+  user-select: none;
+}
+
+.hero__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  will-change: transform;
+  transform: scale(1.06);
+}
+
+/* Gradient fade on the left edge of photo so it blends with content */
+.hero__photo-fade {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 40%;
+  background: linear-gradient(to right, var(--color-bg), transparent);
+  pointer-events: none;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .hero__layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    min-height: 100svh;
+  }
+
+  .hero__left {
+    grid-row: 1;
+    padding-inline: clamp(1.25rem, 5vw, 1.75rem);
+    padding-bottom: 0;
+  }
+
+  .hero__photo-frame {
+    grid-row: 2;
+    height: clamp(260px, 70vw, 380px);
+    margin-inline: clamp(1.25rem, 5vw, 1.75rem);
+    margin-block: 1.5rem;
+    border-radius: var(--radius-md);
+  }
+  .hero__photo-fade { display: none; }
+
+  .hero__name-word {
+    font-size: clamp(4rem, 18vw, 7rem);
+  }
+
+  .hero__top-bar { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .hero__loc { display: none; }
+
+  .hero__lower {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero__stats {
+    width: 100%;
+    justify-content: space-between;
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-md);
+    margin-top: var(--space-sm);
+  }
+  .hero__stat { align-items: flex-start; }
+}
+</style>

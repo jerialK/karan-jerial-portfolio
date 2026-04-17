@@ -1,0 +1,121 @@
+---
+const base1 = [
+  'Supply Chain KPI Dashboard',
+  'CVRP Distribution Optimizer',
+  'Manufacturing Execution System',
+  'Demand Forecasting Tool',
+  'Roll Wear Optimization',
+  'NGO Inventory Manager',
+];
+
+const base2 = [
+  'Python', 'Power BI', 'OR-Tools', 'SAP P2P',
+  'React', 'scikit-learn', 'Power Apps', 'Supabase',
+  'Excel', 'PostgreSQL', 'R', 'LaTeX',
+];
+
+// 4 copies — half-width reset point is always 2 copies away, never visible
+const track1Items = [...base1, ...base1, ...base1, ...base1];
+const track2Items = [...base2, ...base2, ...base2, ...base2];
+---
+
+<section class="marquee-section" aria-label="Projects and skills ticker">
+  <div class="marquee__row" id="mq-row-1">
+    <div class="marquee__track" id="mq-track-1">
+      {track1Items.map((item) => (
+        <div class="marquee__card">{item}</div>
+      ))}
+    </div>
+  </div>
+
+  <div class="marquee__row" id="mq-row-2">
+    <div class="marquee__track" id="mq-track-2">
+      {track2Items.map((item) => (
+        <div class="marquee__card">{item}</div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const track1 = document.getElementById('mq-track-1') as HTMLElement | null;
+  const track2 = document.getElementById('mq-track-2') as HTMLElement | null;
+  const row1   = document.getElementById('mq-row-1');
+  const row2   = document.getElementById('mq-row-2');
+
+  if (!track1 || !track2) return;
+
+  // Reset point = one copy width (scrollWidth / 4 copies = single copy width)
+  const reset1 = track1.scrollWidth / 4;
+  const reset2 = track2.scrollWidth / 4;
+
+  // Both rows start at offset 0 — left edge on load
+  let offset1 = 0;
+  let offset2 = 0;
+
+  let paused1 = false;
+  let paused2 = false;
+
+  row1?.addEventListener('mouseenter', () => { paused1 = true; });
+  row1?.addEventListener('mouseleave', () => { paused1 = false; });
+  row2?.addEventListener('mouseenter', () => { paused2 = true; });
+  row2?.addEventListener('mouseleave', () => { paused2 = false; });
+
+  function tick() {
+    // Row 1: moves LEFT — translate by -offset
+    if (!paused1) {
+      offset1 += 0.5;
+      if (offset1 >= reset1) offset1 = 0;
+      track1.style.transform = `translateX(-${offset1}px)`;
+    }
+
+    // Row 2: moves RIGHT — translate by +offset
+    if (!paused2) {
+      offset2 += 0.4;
+      if (offset2 >= reset2) offset2 = 0;
+      track2.style.transform = `translateX(${offset2}px)`;
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+});
+</script>
+
+<style>
+.marquee-section {
+  background: var(--color-surface);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.marquee__row {
+  overflow: hidden;
+  cursor: default;
+}
+
+.marquee__track {
+  display: flex;
+  gap: 0.75rem;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee__card {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.55em 1.25em;
+}
+</style>

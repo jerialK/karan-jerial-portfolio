@@ -1,0 +1,184 @@
+---
+export interface Props {
+  fromColor?: string;
+  toColor?: string;
+  flip?: boolean;
+}
+
+const {
+  fromColor = '#f0ebe0',
+  toColor = '#e8e2d4',
+  flip = false,
+} = Astro.props;
+---
+
+<div
+  class:list={['wave-divider', flip && 'wave-divider--flip']}
+  style={`--wave-from: ${fromColor}; --wave-to: ${toColor};`}
+  aria-hidden="true"
+>
+  <div class="wave-divider__bleed">
+    <svg
+      class="wave-divider__svg wave-divider__svg--back"
+      viewBox="0 0 1440 260"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path class="wave-divider__path wave-divider__path--back" fill={toColor} />
+    </svg>
+
+    <svg
+      class="wave-divider__svg wave-divider__svg--front"
+      viewBox="0 0 1440 260"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path class="wave-divider__path wave-divider__path--front" fill={toColor} />
+    </svg>
+
+    <div class="wave-divider__blend"></div>
+  </div>
+</div>
+
+<script>
+  type WaveData = {
+    root: HTMLElement;
+    front: SVGPathElement;
+    back: SVGPathElement;
+  };
+
+  const clamp = (value: number, min: number, max: number) =>
+    Math.min(max, Math.max(min, value));
+
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+  const mixPoints = (a: number[], b: number[], t: number) =>
+    a.map((value, index) => lerp(value, b[index], t));
+
+  const FRONT_START = [124, 116, 104, 96, 88, 74];
+  const FRONT_MID = [112, 100, 110, 122, 114, 88];
+  const FRONT_END = [130, 122, 112, 106, 110, 98];
+
+  const BACK_START = [148, 142, 136, 132, 128, 122];
+  const BACK_MID = [138, 130, 132, 140, 142, 136];
+  const BACK_END = [154, 148, 142, 138, 140, 144];
+
+  const buildPath = (points: number[]) => {
+    const [y0, y1, y2, y3, y4, y5] = points;
+    return [
+      `M0,${y0}`,
+      `C120,${y0} 180,${y1} 288,${y1}`,
+      `S468,${y2} 576,${y2}`,
+      `S756,${y3} 864,${y3}`,
+      `S1044,${y4} 1152,${y4}`,
+      `S1332,${y5} 1440,${y5}`,
+      'L1440,260',
+      'L0,260',
+      'Z',
+    ].join(' ');
+  };
+
+  const getProgress = (element: HTMLElement) => {
+    const rect = element.getBoundingClientRect();
+    const vh = window.innerHeight || 1;
+    return clamp((vh - rect.top) / (vh + rect.height * 0.65), 0, 1);
+  };
+
+  const waves: WaveData[] = Array.from(document.querySelectorAll('.wave-divider')).flatMap(
+    (root) => {
+      const front = root.querySelector('.wave-divider__path--front');
+      const back = root.querySelector('.wave-divider__path--back');
+      if (!(root instanceof HTMLElement) || !(front instanceof SVGPathElement) || !(back instanceof SVGPathElement)) {
+        return [];
+      }
+      return [{ root, front, back }];
+    },
+  );
+
+  const renderWave = ({ root, front, back }: WaveData) => {
+    const progress = getProgress(root);
+    const eased = 1 - Math.pow(1 - progress, 3);
+
+    const frontShape =
+      eased < 0.5
+        ? mixPoints(FRONT_START, FRONT_MID, eased / 0.5)
+        : mixPoints(FRONT_MID, FRONT_END, (eased - 0.5) / 0.5);
+
+    const backShape =
+      eased < 0.5
+        ? mixPoints(BACK_START, BACK_MID, eased / 0.5)
+        : mixPoints(BACK_MID, BACK_END, (eased - 0.5) / 0.5);
+
+    front.setAttribute('d', buildPath(frontShape));
+    back.setAttribute('d', buildPath(backShape));
+
+    const frontSvg = front.closest('.wave-divider__svg');
+    const backSvg = back.closest('.wave-divider__svg');
+    if (frontSvg instanceof HTMLElement) {
+      frontSvg.style.transform = `translate3d(${lerp(-10, 10, eased)}px, ${lerp(0, -10, eased)}px, 0)`;
+    }
+    if (backSvg instanceof HTMLElement) {
+      backSvg.style.transform = `translate3d(${lerp(8, -8, eased)}px, ${lerp(0, 8, eased)}px, 0)`;
+    }
+  };
+
+  let rafId = 0;
+  const onFrame = () => {
+    waves.forEach(renderWave);
+    rafId = window.requestAnimationFrame(onFrame);
+  };
+
+  onFrame();
+  window.addEventListener('pagehide', () => cancelAnimationFrame(rafId), { once: true });
+</script>
+
+<style>
+  .wave-divider {
+    position: relative;
+    z-index: 0;
+    height: clamp(11rem, 18vw, 16rem);
+    overflow: visible;
+    background: var(--wave-from);
+  }
+
+  .wave-divider--flip {
+    transform: scaleY(-1);
+  }
+
+  .wave-divider__bleed {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100vw;
+    height: 100%;
+    transform: translateX(-50%);
+    overflow: hidden;
+    background: linear-gradient(to bottom, var(--wave-from) 0%, var(--wave-from) 28%, var(--wave-to) 100%);
+  }
+
+  .wave-divider__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+  }
+
+  .wave-divider__svg--back {
+    opacity: 0.62;
+    filter: blur(10px);
+  }
+
+  .wave-divider__svg--front {
+    opacity: 0.94;
+    filter: blur(2px);
+  }
+
+  .wave-divider__blend {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 38%;
+    background: linear-gradient(to bottom, transparent 0%, color-mix(in srgb, var(--wave-to) 86%, transparent) 60%, var(--wave-to) 100%);
+  }
+</style>

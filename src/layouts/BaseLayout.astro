@@ -1,0 +1,188 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Karan Jerial — Portfolio',
+  description = 'Personal portfolio of Karan Veer Singh Jerial, supply chain & operations engineer.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <!-- Anti-flash: apply saved theme before first paint -->
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Full-page animated wave background -->
+    <canvas id="bgWaveCanvas" aria-hidden="true"></canvas>
+
+    <slot />
+
+    <script>
+      // ── Full-page background sine-wave canvas ──────────────────────
+      (function () {
+        const canvas = document.getElementById('bgWaveCanvas') as HTMLCanvasElement | null;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        let W = 0, H = 0;
+        function resize() { W = canvas!.width = window.innerWidth; H = canvas!.height = window.innerHeight; }
+        resize();
+        window.addEventListener('resize', resize, { passive: true });
+
+        const WAVES: [number, number, number, number, number][] = [
+          [24, 1.4, 0.00022, 0,            0.32],
+          [16, 0.9, 0.00016, Math.PI * 0.7, 0.56],
+          [32, 1.8, 0.00012, Math.PI * 1.4, 0.74],
+        ];
+
+        function waveColor(): [number, number, number, number] {
+          return document.documentElement.getAttribute('data-theme') === 'dark'
+            ? [240, 235, 224, 0.05] : [28, 22, 18, 0.035];
+        }
+
+        let rafId: number;
+        function draw(ts: number) {
+          ctx!.clearRect(0, 0, W, H);
+          const [r, g, b, a] = waveColor();
+          for (const [amp, pFrac, speed, phase, yFrac] of WAVES) {
+            const off = ts * speed + phase;
+            ctx!.beginPath();
+            ctx!.moveTo(0, H * yFrac + Math.sin(off) * amp);
+            for (let x = 4; x <= W; x += 4) {
+              ctx!.lineTo(x, H * yFrac + Math.sin((x / W) * pFrac * Math.PI * 2 + off) * amp);
+            }
+            ctx!.strokeStyle = `rgba(${r},${g},${b},${a})`;
+            ctx!.lineWidth = 1.5;
+            ctx!.stroke();
+          }
+          rafId = requestAnimationFrame(draw);
+        }
+        requestAnimationFrame(draw);
+        window.addEventListener('pagehide', () => cancelAnimationFrame(rafId));
+      })();
+    </script>
+
+    <script>
+      // ── Scroll fade-in observer ──────────────────────────────────────
+      const fadeObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              fadeObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      );
+      document.querySelectorAll('.fade-in').forEach((el) => fadeObserver.observe(el));
+
+      // ── Mask-line reveal observer ──────────────────────────────────
+      const maskObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              maskObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      document.querySelectorAll('.mask-line').forEach((el) => maskObserver.observe(el));
+
+      // ── Nav scroll border ────────────────────────────────────────────
+      const nav = document.querySelector('.nav');
+      window.addEventListener('scroll', () => {
+        if (nav) nav.classList.toggle('scrolled', window.scrollY > 10);
+      }, { passive: true });
+
+      // ── Theme toggle ─────────────────────────────────────────────────
+      const btn = document.getElementById('theme-toggle');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+          }
+        });
+      }
+    </script>
+
+    <script>
+      // ── Custom cursor (mouse-only devices) ───────────────────────────
+      if (window.matchMedia('(pointer: fine)').matches) {
+        const dot = document.createElement('div');
+        dot.id = 'cursor-dot';
+        document.body.appendChild(dot);
+
+        let mx = -200, my = -200, cx = -200, cy = -200;
+
+        document.addEventListener('mousemove', (e) => {
+          mx = e.clientX; my = e.clientY;
+          dot.classList.add('active');
+        });
+        document.addEventListener('mouseleave', () => dot.classList.remove('active'));
+
+        const HOVER_SEL = 'a, button, [role="button"], input, textarea, select, label, .proj-spread, .cert-card';
+        document.addEventListener('pointerover', (e) => {
+          if ((e.target as Element).closest(HOVER_SEL)) dot.classList.add('hover');
+        });
+        document.addEventListener('pointerout', (e) => {
+          if ((e.target as Element).closest(HOVER_SEL)) dot.classList.remove('hover');
+        });
+
+        function moveCursor() {
+          cx += (mx - cx) * 0.16;
+          cy += (my - cy) * 0.16;
+          dot.style.left = cx + 'px';
+          dot.style.top  = cy + 'px';
+          requestAnimationFrame(moveCursor);
+        }
+        requestAnimationFrame(moveCursor);
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+
+  /* Background wave canvas */
+  #bgWaveCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* All direct body children above the bg canvas */
+  body > *:not(#bgWaveCanvas):not(#cursor-dot) {
+    position: relative;
+    z-index: 1;
+  }
+</style>

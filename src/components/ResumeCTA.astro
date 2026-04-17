@@ -1,0 +1,101 @@
+---
+---
+
+<section class="resume-cta" id="resume">
+  <div class="container resume-cta__inner">
+    <div class="resume-cta__text fade-in">
+      <p class="eyebrow">Resume</p>
+      <h2 class="resume-cta__title fade-in fade-in-delay-1">
+        Want the full picture?<br/>Download my resume.
+      </h2>
+      <p class="resume-cta__desc fade-in fade-in-delay-2">
+        Supply chain, operations, procurement, and manufacturing engineering — all in one PDF.
+      </p>
+    </div>
+    <div class="resume-cta__action fade-in fade-in-delay-3">
+      <a href="/resume.pdf" download class="btn-resume" aria-label="Download resume PDF">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download Resume
+      </a>
+      <p class="resume-cta__note label">PDF · Updated 2026</p>
+    </div>
+  </div>
+</section>
+
+<style>
+.resume-cta {
+  background: #1c1612;
+  padding-block: var(--section-padding);
+}
+
+.resume-cta__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(2rem, 6vw, 4rem);
+  flex-wrap: wrap;
+}
+
+.resume-cta__text {
+  flex: 1;
+  min-width: 260px;
+}
+
+.resume-cta__text .eyebrow {
+  color: rgba(255,255,255,0.45);
+  margin-bottom: var(--space-sm);
+}
+
+.resume-cta__title {
+  color: #ffffff;
+  font-weight: var(--weight-light);
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-md);
+}
+
+.resume-cta__desc {
+  color: rgba(255,255,255,0.55);
+  font-size: 1rem;
+  max-width: 44ch;
+  line-height: 1.65;
+}
+
+.resume-cta__action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.btn-resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.06em;
+  padding: 0.85em 1.75em;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,0.25);
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+.btn-resume:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.5);
+}
+
+.resume-cta__note {
+  color: rgba(255,255,255,0.35);
+  font-size: 0.72rem;
+}
+</style>

@@ -1,0 +1,252 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import WaveDivider from '../components/WaveDivider.astro';
+import About from '../components/About.astro';
+import Experience from '../components/Experience.astro';
+import Projects from '../components/Projects.astro';
+import Marquee from '../components/Marquee.astro';
+import Skills from '../components/Skills.astro';
+import ResumeCTA from '../components/ResumeCTA.astro';
+import Contact from '../components/Contact.astro';
+---
+
+<BaseLayout
+  title="Karan Veer Singh Jerial — Supply Chain & Operations Engineer"
+  description="Operations & Supply Chain Engineer with 6+ years in manufacturing. Master of Engineering Management candidate at Northeastern University."
+>
+  <Nav />
+
+  <Hero />
+
+  <WaveDivider fromColor="#f0ebe0" toColor="#e8e2d4" />
+  <About />
+
+  <WaveDivider fromColor="#e8e2d4" toColor="#f0ebe0" flip />
+  <Experience />
+
+  <WaveDivider fromColor="#f0ebe0" toColor="#e8e2d4" />
+  <Projects />
+
+  <Marquee />
+
+  <WaveDivider fromColor="#e8e2d4" toColor="#f0ebe0" flip />
+  <Skills />
+
+  <WaveDivider fromColor="#f0ebe0" toColor="#1c1612" />
+  <ResumeCTA />
+
+  <WaveDivider fromColor="#1c1612" toColor="#e8e2d4" />
+  <Contact />
+
+  <!-- Footer — editorial colophon -->
+  <footer class="site-footer">
+    <!-- CTA strip -->
+    <div class="footer__cta">
+      <div class="container footer__cta-inner">
+        <div class="footer__cta-text">
+          <p class="eyebrow footer__cta-eyebrow">Available for opportunities</p>
+          <p class="footer__cta-headline">Let's build<br/><em>something great.</em></p>
+        </div>
+        <a id="footer-email-cta" href="#" class="footer__email-link">
+          <span id="footer-email-addr">jerial.k@northeastern.edu</span>
+          <span class="footer__email-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Colophon bar -->
+    <div class="footer__colophon">
+      <div class="container footer__colophon-inner">
+        <div class="footer__colophon-brand">
+          <span class="footer__sig">Karan Jerial</span>
+          <span class="footer__divider" aria-hidden="true">—</span>
+          <span class="label footer__location">Boston, MA</span>
+        </div>
+
+        <nav class="footer__colophon-links" aria-label="Footer links">
+          <a href="#about" class="footer__col-link label">About</a>
+          <a href="#projects" class="footer__col-link label">Work</a>
+          <a
+            href="https://www.linkedin.com/in/karan-veer-singh-jerial-b1340216a"
+            target="_blank" rel="noopener noreferrer"
+            class="footer__col-link label"
+          >LinkedIn ↗</a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+             class="footer__col-link label">GitHub ↗</a>
+        </nav>
+
+        <div class="footer__colophon-right">
+          <span class="label footer__clock" id="footer-clock" aria-label="Current Boston time"></span>
+          <span class="label footer__copy">© 2026</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+</BaseLayout>
+
+<script>
+  // Email reveal
+  (function () {
+    const cta  = document.getElementById('footer-email-cta') as HTMLAnchorElement | null;
+    const addr = document.getElementById('footer-email-addr');
+    const a    = 'jerial.k' + '\u0040' + 'northeastern.edu';
+    if (cta)  cta.setAttribute('href', 'mailto:' + a);
+    if (addr) addr.textContent = a;
+  })();
+
+  // Live Boston clock
+  (function () {
+    const el = document.getElementById('footer-clock');
+    if (!el) return;
+    function tick() {
+      el!.textContent = new Date().toLocaleTimeString('en-US', {
+        timeZone: 'America/New_York',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      }) + ' EST';
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
+
+<style>
+/* ── Footer ─────────────────────────────────────────────────────── */
+.site-footer {
+  background: var(--color-surface);
+}
+
+/* CTA strip */
+.footer__cta {
+  border-top: 1px solid var(--color-border);
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+.footer__cta-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: clamp(2rem, 6vw, 4rem);
+  flex-wrap: wrap;
+}
+
+.footer__cta-eyebrow {
+  margin-bottom: var(--space-sm);
+  color: var(--color-signal);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+}
+
+.footer__cta-headline {
+  font-family: var(--font-heading);
+  font-variation-settings: "opsz" 144;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 300;
+  font-style: normal;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+}
+.footer__cta-headline em {
+  font-style: italic;
+  font-weight: 700;
+}
+
+.footer__email-link {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  font-weight: var(--weight-regular);
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.25em;
+  flex-shrink: 0;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+.footer__email-link:hover {
+  color: var(--color-signal);
+  border-color: var(--color-signal);
+}
+
+.footer__email-arrow {
+  font-size: 1.2em;
+  transition: transform var(--transition-fast);
+}
+.footer__email-link:hover .footer__email-arrow {
+  transform: translateX(4px);
+}
+
+/* Colophon bar */
+.footer__colophon {
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--space-lg);
+}
+
+.footer__colophon-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.footer__colophon-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.footer__sig {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.footer__divider {
+  color: var(--color-border);
+  font-size: 0.75rem;
+}
+
+.footer__colophon-links {
+  display: flex;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.footer__col-link {
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  transition: color var(--transition-fast);
+}
+.footer__col-link:hover { color: var(--color-signal); }
+
+.footer__colophon-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.footer__clock,
+.footer__copy {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 620px) {
+  .footer__cta-inner { flex-direction: column; align-items: flex-start; }
+  .footer__colophon-inner { flex-direction: column; align-items: flex-start; gap: var(--space-md); }
+  .footer__colophon-right { gap: var(--space-sm); }
+}
+</style>

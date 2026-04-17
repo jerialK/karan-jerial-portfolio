@@ -1,0 +1,25 @@
+---
+export interface Props {
+  id: string;
+  label: string;
+  bg?: string;
+}
+const { id, label, bg = 'var(--color-bg)' } = Astro.props;
+---
+
+<section class="section placeholder-section" id={id} style={`background: ${bg}`}>
+  <div class="container">
+    <p class="eyebrow fade-in">{label}</p>
+    <h2 class="fade-in fade-in-delay-1" style="color: var(--color-border);">
+      Coming soon — paste your content.
+    </h2>
+  </div>
+</section>
+
+<style>
+.placeholder-section {
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+}
+</style>

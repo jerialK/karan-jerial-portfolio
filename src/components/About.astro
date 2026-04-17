@@ -1,0 +1,246 @@
+---
+const stats = [
+  { value: '30%',    label: 'Procurement cost saved' },
+  { value: '40%',    label: 'Lead time reduction' },
+  { value: '$500K+', label: 'Facility under budget' },
+  { value: '3.8',    label: 'MEM GPA' },
+];
+---
+
+<section class="about section" id="about" aria-label="About">
+  <div class="container">
+
+    <p class="section-eyebrow fade-in">About</p>
+
+    <div class="about__grid">
+
+      <!-- Left: bio -->
+      <div class="about__bio">
+        <h2 class="about__name mask-line fade-in fade-in-delay-1">
+          <span>Karan Veer<br/>Singh Jerial</span>
+        </h2>
+
+        <p class="about__pull fade-in fade-in-delay-2">
+          Operations &amp; Supply Chain Engineer with 6+ years across
+          manufacturing, procurement, production planning, and industrial
+          process improvement.
+        </p>
+
+        <p class="about__body fade-in fade-in-delay-2">
+          I've led multi-stage operations, supplier coordination, quality
+          systems, and facility execution with a strong focus on measurable
+          business outcomes. At Northeastern, I'm extending that operating
+          depth with engineering management, forecasting, optimization,
+          Power BI, Python analytics, and full-stack systems work.
+        </p>
+
+        <!-- Stats -->
+        <dl class="about__stats fade-in fade-in-delay-3">
+          {stats.map(({ value, label }) => (
+            <div class="about__stat">
+              <dt class="about__stat-val">{value}</dt>
+              <dd class="about__stat-label">{label}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <!-- Right: meta card -->
+      <aside class="about__sidebar fade-in fade-in-delay-2">
+
+        <div class="meta-block">
+          <span class="eyebrow meta-block__key">Education</span>
+          <p class="meta-block__val">
+            Master of Engineering Management<br/>
+            <span class="label">Northeastern University · GPA 3.8</span><br/>
+            <span class="label">Expected Aug 2027</span>
+          </p>
+        </div>
+
+        <div class="meta-block">
+          <span class="eyebrow meta-block__key">Location</span>
+          <p class="meta-block__val">Boston, MA</p>
+        </div>
+
+        <div class="meta-block">
+          <span class="eyebrow meta-block__key">Seeking</span>
+          <p class="meta-block__val">
+            Operations, Supply Chain, Procurement,<br/>and Analytics roles
+          </p>
+        </div>
+
+        <div class="meta-block">
+          <span class="eyebrow meta-block__key">Focus</span>
+          <p class="meta-block__val">
+            Manufacturing systems, forecasting,<br/>
+            procurement strategy, and operations analytics
+          </p>
+        </div>
+
+        <div class="meta-block meta-block--contact">
+          <span class="eyebrow meta-block__key">Contact</span>
+          <div class="meta-block__links">
+            <a id="about-email" class="about__link" href="#">—</a>
+            <a
+              href="https://www.linkedin.com/in/karan-veer-singh-jerial-b1340216a"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="about__link"
+            >LinkedIn ↗</a>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const el = document.getElementById('about-email');
+    if (el) {
+      const addr = 'jerial.k' + '@' + 'northeastern.edu';
+      el.textContent = addr;
+      el.setAttribute('href', 'mailto:' + addr);
+    }
+  })();
+</script>
+
+<style>
+.about {
+  background: var(--color-surface);
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: 1fr clamp(260px, 32%, 360px);
+  gap: clamp(2.5rem, 7vw, 6rem);
+  align-items: start;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+@media (max-width: 860px) {
+  .about__grid { grid-template-columns: 1fr; }
+  .about__sidebar { order: -1; }
+}
+
+/* ── Bio ────────────────────────────────────────────────────────── */
+.about__name {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.about__pull {
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  font-weight: var(--weight-regular);
+  color: var(--color-text);
+  line-height: 1.75;
+  max-width: 54ch;
+  margin-bottom: var(--space-md);
+}
+
+.about__body {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  line-height: 1.85;
+  max-width: 58ch;
+}
+
+/* ── Stats ──────────────────────────────────────────────────────── */
+.about__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  border-top: 1px solid var(--color-border);
+}
+
+.about__stat {
+  padding: clamp(1.25rem, 3vw, 2rem) 0;
+  padding-right: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.about__stat:nth-child(odd) {
+  border-right: 1px solid var(--color-border);
+  padding-right: clamp(1rem, 3vw, 2rem);
+}
+.about__stat:nth-child(even) {
+  padding-left: clamp(1rem, 3vw, 2rem);
+}
+
+.about__stat-val {
+  font-family: var(--font-heading);
+  font-variation-settings: "opsz" 144;
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.about__stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  line-height: 1.4;
+}
+
+/* ── Sidebar / meta ─────────────────────────────────────────────── */
+.about__sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-block {
+  padding-block: clamp(1rem, 2.5vw, 1.5rem);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.meta-block:first-child {
+  border-top: 1px solid var(--color-border);
+}
+
+.meta-block__key {
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+}
+
+.meta-block__val {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+.meta-block__links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.about__link {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--color-border);
+  transition: text-decoration-color var(--transition-fast), color var(--transition-fast);
+}
+.about__link:hover {
+  color: var(--color-signal);
+  text-decoration-color: var(--color-signal);
+}
+</style>

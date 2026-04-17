@@ -1,0 +1,186 @@
+---
+const categories = [
+  {
+    label: 'Operations & Manufacturing',
+    skills: [
+      'Multi-stage Production Management',
+      'Quality Assurance & NDT',
+      'Heat Treatment & Process Engineering',
+      'Capital Project Management',
+      'Lean & Continuous Improvement',
+      'SOP Development',
+    ],
+  },
+  {
+    label: 'Supply Chain & Procurement',
+    skills: [
+      'Strategic Sourcing & Supplier Mgmt',
+      'SAP Procure-to-Pay (RFQ / e-Bidding)',
+      'MRP / FOQ / POQ / Wagner-Whitin',
+      'Demand Forecasting & Planning',
+      'Inventory Management & Control',
+      'Logistics & Transportation Planning',
+    ],
+  },
+  {
+    label: 'Analytics & Software',
+    skills: [
+      'Python (Pandas · OR-Tools · scikit-learn)',
+      'Power BI',
+      'Excel',
+      'R',
+      'React / JavaScript / Vite',
+      'Supabase / PostgreSQL',
+      'Power Apps (Canvas) / SharePoint',
+      'LaTeX / Data Visualization',
+    ],
+  },
+  {
+    label: 'Project Management',
+    skills: [
+      'Agile / Scrum / Waterfall / Hybrid',
+      'Cross-functional Team Leadership',
+      'Vendor Negotiation & Contracts',
+      'Risk Assessment & Mitigation',
+      'Scope & Schedule Management',
+      'JIRA / MS Project',
+    ],
+  },
+];
+
+const certifications = [
+  { title: 'AIST PM 201 — Process Metallurgy',          org: 'AIST' },
+  { title: 'EAF Steelmaking — Electric Arc Furnace',    org: 'AIST' },
+  { title: 'MEM Student',                               org: 'Northeastern University · GPA 3.8' },
+  { title: 'AIST Member',                               org: 'Globe-Trotters Chapter' },
+];
+---
+
+<section class="skills section" id="skills" aria-label="Skills and certifications">
+  <div class="container">
+
+    <p class="section-eyebrow fade-in">Skills &amp; Certifications</p>
+    <h2 class="skills__heading fade-in fade-in-delay-1">What I work with</h2>
+
+    <div class="skills__grid">
+      {categories.map((cat, i) => (
+        <div class={`skill-col fade-in fade-in-delay-${(i % 4) + 1}`}>
+          <h3 class="skill-col__label">{cat.label}</h3>
+          <ul class="skill-col__list" role="list">
+            {cat.skills.map((s) => (
+              <li class="skill-col__item">{s}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="certs fade-in fade-in-delay-2">
+      <p class="section-eyebrow certs__eyebrow">Certifications &amp; Memberships</p>
+      <div class="certs__grid">
+        {certifications.map((c) => (
+          <div class="cert-card">
+            <p class="cert-card__title">{c.title}</p>
+            <p class="cert-card__org label">{c.org}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.skills {
+  background: var(--color-bg);
+}
+
+.skills__heading {
+  font-weight: var(--weight-light);
+  margin-block: var(--space-sm) clamp(2.5rem, 6vw, 4.5rem);
+}
+
+/* ── Skill grid ─────────────────────────────────────────────────── */
+.skills__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: clamp(3rem, 7vw, 5rem);
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.skill-col__label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: var(--weight-regular);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-signal);
+  margin-bottom: clamp(0.75rem, 2vw, 1.25rem);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.skill-col__list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.skill-col__item {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  line-height: 1.5;
+  padding-left: 1rem;
+  position: relative;
+}
+.skill-col__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 4px;
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* ── Certifications ─────────────────────────────────────────────── */
+.certs__eyebrow {
+  margin-bottom: clamp(1rem, 3vw, 1.75rem);
+}
+
+.certs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-border);
+}
+
+.cert-card {
+  background: var(--color-surface);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: background var(--transition-fast);
+}
+.cert-card:hover {
+  background: var(--color-bg);
+}
+
+.cert-card__title {
+  font-size: 0.875rem;
+  font-weight: var(--weight-medium);
+  line-height: 1.45;
+  color: var(--color-text);
+}
+
+.cert-card__org {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
+</style>
