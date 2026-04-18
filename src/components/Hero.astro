@@ -333,6 +333,7 @@
 .hero__name-line {
   overflow: hidden;
   line-height: 0.86;
+  padding-bottom: 0.18em;
 }
 
 .hero__name-word {
@@ -361,6 +362,10 @@
 .hero__name-block.revealed .hero__name-word { transform: translateY(0); }
 .hero__name-block.revealed .hero__name-line:nth-child(2) .hero__name-word {
   transition-delay: 0.09s;
+}
+/* After reveal completes, allow descenders to render fully */
+.hero__name-block.revealed .hero__name-line {
+  overflow: visible;
 }
 
 /* ── Lower strip ────────────────────────────────────────────────────── */
